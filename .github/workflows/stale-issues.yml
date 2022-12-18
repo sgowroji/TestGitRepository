@@ -10,17 +10,18 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - name: Awaiting resposnse issues
+      - name: Awaiting user resposnse issues
         uses: actions/stale@v5
         with:
           days-before-issue-stale: -1
           days-before-issue-close: -1
           stale-issue-label: "stale"
           only-issue-labels: 
-           - stat:awaiting response
+           'awaiting-user-response'
           stale-issue-message: > 
-            This issue is stale because it has been open for 30 days with no activity.
+            This issue is stale because it has been open for 1 days with no activity.
             It will be closed if no further activity occurs. Thank you.
           close-issue-message: >
-            This issue was closed because it has been inactive for 14 days since being marked as stale.
+            This issue was closed because it has been inactive for 1 days since being marked as stale.
             Please reopen if you'd like to work on this further.
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
