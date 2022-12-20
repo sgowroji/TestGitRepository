@@ -17,7 +17,7 @@ jobs:
           days-before-issue-close: 1
           stale-issue-label: "stale"
           only-issue-labels:
-            '- stat:awaiting response'
+            "stat:awaiting response"
           stale-issue-message: > 
             This issue is stale because it has been open for 1 days with no activity.
             It will be closed if no further activity occurs. Thank you.
