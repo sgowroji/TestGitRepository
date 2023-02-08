@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
-      - uses: actions-ecosystem/action-add-labels@main
+      - uses: actions-ecosystem/action-add-labels@v1
         if: github.actor == 'copybara-service[bot]'
         with:
           labels: not stale
