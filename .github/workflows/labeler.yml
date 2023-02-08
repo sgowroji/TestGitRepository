@@ -15,6 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@main
       - uses: actions-ecosystem/action-add-labels@main
-        if: github.actor == 'copybara-service'
+        if: github.actor == 'copybara-service[bot]'
         with:
           labels: not stale
