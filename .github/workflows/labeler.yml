@@ -13,3 +13,4 @@ jobs:
         if: github.actor == 'sgowroji'
         with:
           labels: not stale
+          debug-only: true
