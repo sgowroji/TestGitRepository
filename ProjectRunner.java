@@ -1,6 +1,6 @@
 package com.example;
 
-public class ProjectRunner {
+public class ProjectRun {
     public static void main(String args[]) {
         Greeting.sayHi();
     }
