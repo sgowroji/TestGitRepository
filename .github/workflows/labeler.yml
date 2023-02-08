@@ -3,7 +3,7 @@
 # You can adjust the behavior by modifying this file.
 # For more information, see:
 # https://github.com/actions-ecosystem/action-add-labels
-name: Add Label to copybara-service pr
+name: Add not stale label to copybara-service pr
 
 on:
   pull_request:
