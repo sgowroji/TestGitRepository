@@ -1,2 +1,2 @@
 # TestGitRepository
-Git files to test the probot
+Git files to test the probot.
