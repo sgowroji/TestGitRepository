@@ -1,4 +1,4 @@
-name: Add Labels
+name: Add Label to copybara-service pr
 
 on:
   pull_request:
@@ -10,7 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@main
       - uses: actions-ecosystem/action-add-labels@main
-        if: github.actor == 'sgowroji'
+        if: github.actor == 'copybara-service'
         with:
           labels: not stale
-          ACTIONS_STEP_DEBUG: true
