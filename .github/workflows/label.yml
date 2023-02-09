@@ -12,7 +12,7 @@ on:
 jobs:
   add_labels:
     runs-on: ubuntu-latest
-    if: github.actor == 'copybara-service[bot]'
+    if: github.actor == 'sgowroji'
     steps:
       - name: View PR author
         run: echo "This PR is opened by github.actor."
