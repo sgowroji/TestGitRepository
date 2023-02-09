@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: View PR author
-        if: ${{ github.event.issue.pull_request }}
         run: echo "This PR is opened by ${{ github.event.pull_request.user.login }} ."
       - uses: actions/checkout@main
       - uses: actions-ecosystem/action-add-labels@v1
