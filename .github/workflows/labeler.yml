@@ -17,6 +17,6 @@ jobs:
         run: echo "This PR is opened by ${{ github.event.pull_request.user.login }} ."
       - uses: actions/checkout@main
       - uses: actions-ecosystem/action-add-labels@v1
-        if: github.actor == 'sgowroji'
+        if: ${{ github.event.pull_request.user.login }} == 'sgowroji'
         with:
           labels: not stale
