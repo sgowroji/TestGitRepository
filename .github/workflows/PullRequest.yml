@@ -1,19 +1,22 @@
-name: Pull Request Action
+name: Create Pull Request Example Command
 on:
-  push:
-    branches:
-      - feature/*
-
+  repository_dispatch:
+    types: [cpr-example-command]
 jobs:
-  create-pull-request:
+  createPullRequest:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
-      - name: pull-request
-        uses: repo-sync/pull-request@v2
-        with:
-          destination_branch: "develop"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          pr_label: "feature, automated pr"
-          pr_title: "[Example] Simple demo"
+      - uses: actions/checkout@v3
+      - name: Create commits
+        run: |
+          git config user.name 'sgowroji'
+          git config user.email 'sgowroji@users.noreply.github.com'
+          date +%s > report.txt
+          git commit -am "Modify tracked file during workflow"
+          date +%s > new-report.txt
+          git add -A
+          git commit -m "Add untracked file during workflow"
+      - name: Uncommitted change
+        run: date +%s > report.txt
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
