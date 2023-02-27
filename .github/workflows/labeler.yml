@@ -22,6 +22,7 @@ jobs:
       - name: Update Priority Label
         uses: actions/github-script@v4
         with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const issue_number = context.payload.issue.number;
             const labels = await github.issues.listLabelsOnIssue({
@@ -44,5 +45,3 @@ jobs:
                 labels: ['P1']
               });
             }
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
