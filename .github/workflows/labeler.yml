@@ -17,7 +17,7 @@ jobs:
             days=$(( ( $(date -u +%s) - $(date -u +%s -d $added) ) / 86400 ))
             echo "::set-output name=days::$days"
           fi
-        if: ${{ steps.check_label.outputs.days }} >= 1
+        if: ${{ steps.check_label.outputs.days }} >= 2
 
       - name: Update Priority Label
         uses: actions/github-script@v4
