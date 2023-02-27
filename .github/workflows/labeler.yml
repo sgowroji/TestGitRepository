@@ -15,7 +15,7 @@ jobs:
           if [ "$label" = "P0" ]; then
             added=$(jq -r ".label.created_at" $GITHUB_EVENT_PATH)
             days=$(( ( $(date -u +%s) - $(date -u +%s -d $added) ) / 86400 ))
-            echo "::set-output name=days::$days"
+            echo "::set-output name={days}::{$days}"
           fi
         if: ${{ steps.check_label.outputs.days }} >= 2
 
