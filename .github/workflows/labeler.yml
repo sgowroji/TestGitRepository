@@ -12,6 +12,7 @@ jobs:
         id: check_label
         run: |
           label=$(jq -r ".label.name" $GITHUB_EVENT_PATH)
+          echo "::set-output name={label}::$($label)"
           if [ "$label" = "P0" ]; then
             added=$(jq -r ".label.created_at" $GITHUB_EVENT_PATH)
             days=$(( ( $(date -u +%s) - $(date -u +%s -d $added) ) / 86400 ))
