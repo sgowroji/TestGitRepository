@@ -11,6 +11,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         ADD_LABEL: "P1"
-        AFTER_DAYS: 1
+        AFTER_DAYS: 0
         SKIP_LABELS: ""
         REMOVE_LABELS: "P0"
