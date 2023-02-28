@@ -24,7 +24,9 @@ jobs:
           script: |
             const author = context.payload.pull_request.user.login;
             return { author: author };
-          
+      - name: Debug
+        run: echo "PR author is ${{ steps.pr-author-check.outputs.author }}"
+    
       - name: Add "not stale" label
         uses: actions/github-script@v4
         if: env.DEBUG == 'true'
