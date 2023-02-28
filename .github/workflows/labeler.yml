@@ -1,4 +1,4 @@
-name: Add an attention label to an open pull request for review after 4 days.
+name: Priority changer on stale P0 issues 
 on:
   schedule:
   - cron:  '0 0 * * 1-5'
@@ -6,7 +6,7 @@ jobs:
   pullrequestAttentionLabel:
     runs-on: ubuntu-latest
     steps:
-    - name: Add an attention label to an open issues 
+    - name: Changes priority to P1 
       uses: crazymanish/pullrequest-attention-label-action@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
