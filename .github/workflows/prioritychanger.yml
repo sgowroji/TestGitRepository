@@ -1,16 +1,49 @@
-name: Priority changer on stale P0 issues 
+name: Change Priority Label
+
 on:
-  schedule:
-  - cron:  '0 0 * * 1-5'
+  issues:
+    types: [labeled]
+
 jobs:
-  pullrequestAttentionLabel:
+  change_priority_label:
     runs-on: ubuntu-latest
     steps:
-    - name: Changes priority to P1 
-      uses: crazymanish/pullrequest-attention-label-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        ADD_LABEL: "P1"
-        AFTER_DAYS: 0
-        SKIP_LABELS: ""
-        REMOVE_LABELS: "P0"
+      - name: Check if label is P0 and was added more than 60 days ago
+        id: check_label
+        run: |
+          label=$(jq -r ".label.name" $GITHUB_EVENT_PATH)
+          echo "::set-output name={label}::$($label)"
+          if [ "$label" = "P0" ]; then
+            added=$(jq -r ".label.created_at" $GITHUB_EVENT_PATH)
+            days=$(( ( $(date -u +%s) - $(date -u +%s -d $added) ) / 86400 ))
+            echo "::set-output name={days}::{$days}"
+          fi
+        if: ${{ steps.check_label.outputs.days }} >= 2
+
+      - name: Update Priority Label
+        uses: actions/github-script@v4
+        env:
+            repo-token: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          script: |
+            const issue_number = context.payload.issue.number;
+            const labels = await github.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number
+            });
+            const currentLabel = labels.data.find(label => label.name === 'P0');
+            if (currentLabel) {
+              await github.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue_number,
+                name: currentLabel.name
+              });
+              await github.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue_number,
+                labels: ['P1']
+              });
+            }
