@@ -9,6 +9,9 @@ on:
 jobs:
   update_priority_label:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
     steps:
       - name: Get P0-labeled issues older than 60 days
         id: get_issues
