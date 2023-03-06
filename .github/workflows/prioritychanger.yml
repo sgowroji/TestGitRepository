@@ -2,57 +2,19 @@ name: Update Priority Label
 
 on:
   schedule:
-    - cron: '* */5 * * *' # Run every 5min a day
+    - cron: '*/5 * * * *' # Run every 5min a day
   issues:
     types: [labeled]
 
 jobs:
-  update_priority_label:
+  check_p0_label:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      issues: write
     steps:
-      - name: Get P0-labeled issues older than 60 days
-        id: get_issues
-        uses: peter-evans/find-comment@v1
-        with:
-          issue-type: issue
-          issue-query: 'is:open label:P0'
-          comment-author: github-actions[bot]
-          comment-body: 'P0 label was added more than 60 days ago'
-          age: '60d'
-          token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Update Priority Label
-        if: steps.get_issues.outputs.comment_matched == 'false'
-        uses: actions/github-script@v4
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          script: |
-            const issue_number = context.payload.issue.number;
-            const labels = await github.issues.listLabelsOnIssue({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issue_number
-            });
-            const currentLabel = labels.data.find(label => label.name === 'P0');
-            if (currentLabel) {
-              const created_at = currentLabel.created_at;
-              const days = Math.round((Date.now() - new Date(created_at)) / (1000 * 60 * 60 * 24));
-              if (days >= 1) {
-                await github.issues.removeLabel({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issue_number,
-                  name: currentLabel.name
-                });
-                await github.issues.addLabels({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issue_number,
-                  labels: ['P1']
-                });
-              }
-            }
+    - name: Check P0 label
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        python check_p0_label.py
