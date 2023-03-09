@@ -27,6 +27,6 @@ jobs:
           P0_LABEL: 'P0'
           P1_LABEL: 'P1'
           AGE_THRESHOLD_DAYS: 0
-          script: |
+          run: |
             const script = require('./\.github/workflows/scripts/change-label.js')
             script({github, context})
