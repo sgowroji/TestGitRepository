@@ -29,4 +29,4 @@ jobs:
           AGE_THRESHOLD_DAYS: 0
           run: |
             const script = require('./\.github/workflows/scripts/change-label.js')
-            script({github, context})
+            node script
