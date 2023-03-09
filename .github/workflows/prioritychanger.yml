@@ -22,8 +22,8 @@ jobs:
       - name: Change P0 label to P1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OWNER: <owner>
-          REPO: <repository>
+          OWNER: sgowroji
+          REPO: TestGitRepository
           P0_LABEL: 'P0'
           P1_LABEL: 'P1'
           AGE_THRESHOLD_DAYS: 60
