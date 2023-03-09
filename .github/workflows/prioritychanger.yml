@@ -23,7 +23,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OWNER: sgowroji
-          REPO: TestGitRepository
+          REPO: sgowroji/TestGitRepository
           P0_LABEL: 'P0'
           P1_LABEL: 'P1'
           AGE_THRESHOLD_DAYS: 0
