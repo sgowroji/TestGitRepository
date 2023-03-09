@@ -26,7 +26,6 @@ jobs:
           REPO: sgowroji/TestGitRepository
           P0_LABEL: 'P0'
           P1_LABEL: 'P1'
-          AGE_THRESHOLD_DAYS: 0
-          run: |
-            const script = require('./\.github/workflows/scripts/change-label.js')
-            node script
+          AGE_THRESHOLD_DAYS: 60
+        run: |
+          node change-label.js
