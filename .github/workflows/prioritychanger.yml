@@ -1,31 +1,24 @@
-name: Change P0 label to P1 after 60 days
+name: Update issue priority
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # Run every 5 min. 
+    - cron: '*/5 * * * *' # Run every day at midnight
 
 jobs:
-  change_p0_label_to_p1:
+  update-priority:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Update issue priority
+        uses: peter-evans/wait-action@v2.1.2 # Wait for 60 days before updating priority
         with:
-          node-version: '16.x'
-      
-      - name: Install dependencies
-        run: npm install @octokit/rest
-      
-      - name: Change P0 label to P1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OWNER: 'sgowroji'
-          REPO: 'sgowroji/TestGitRepository'
-          P0_LABEL: 'P0'
-          P1_LABEL: 'P1'
-          AGE_THRESHOLD_DAYS: 60
-        run: |
-          node change-label.js
+          time: '0d'
+          
+      - name: Update issue priority
+        uses: peter-evans/github-issues-automation@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          action: update
+          label: P0
+          new-label: P1
