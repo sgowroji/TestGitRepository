@@ -1,0 +1,45 @@
+name: Comment on Approved PR
+
+on:
+  pull_request_review:
+    types: [submitted]
+  schedule:
+    - cron: '0 0 * * *' # run every day at midnight
+
+jobs:
+  comment-on-approved-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Wait 1 day
+        uses: technote-space/wait-action@v2
+        with:
+          time: 1d
+      - name: Comment on approved PR
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: reviews } = await github.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number
+            });
+            const approvedReviews = reviews.filter(review => review.state === "APPROVED");
+            if (approvedReviews.length > 0) {
+              const { data: comments } = await github.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number
+              });
+              const alreadyCommented = comments.some(comment => comment.user.login === "github-actions[bot]" && comment.body.startsWith("This PR has been approved."));
+              if (!alreadyCommented) {
+                await github.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.payload.pull_request.number,
+                  body: "This PR has been approved for over 24 hours. Please merge when ready."
+                });
+              }
+            }
