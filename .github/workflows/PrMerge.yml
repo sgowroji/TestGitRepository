@@ -1,24 +1,25 @@
-name: Comment on Approved PR
+name: Comment on PR
 
 on:
   pull_request_review:
     types: [submitted]
+  schedule:
+    - cron: '*/5 * * * *' # Runs every day at midnight UTC
 
 jobs:
-  comment-on-approved-pr:
+  comment-on-pr:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Comment on approved PR
-        if: github.event.review.state == 'approved'
-        uses: actions/github-script@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            await github.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-              body: "This PR has been approved. Please merge when ready."
-            });
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14.x'
+    - name: Install dependencies
+      run: npm install
+    - name: Comment on PR
+      if: ${{ github.event.review.state == 'approved' && (github.event.timestamp - github.event.pull_request.updated_at) / (24*60*60*1000) >= 1 }}
+      run: node .github/actions/comment-on-pr/index.js
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
