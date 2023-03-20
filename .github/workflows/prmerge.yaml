@@ -1,25 +1,26 @@
-name: Comment on PR
+name: Comment on Approved PRs
 
 on:
-  pull_request_review:
-    types: [submitted]
   schedule:
-    - cron: '*/5 * * * *' # Runs every day at midnight UTC
-
+    - cron: '*/2 * * * *'  
+    
 jobs:
-  comment-on-pr:
+  comment-on-approved-prs:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
+    - uses: actions/checkout@v2
+
+    - name: Get all merged pull requests
+      id: get_prs
+      run: |
+        echo "::set-output name=prs::$(curl -s -H \"Accept: application/vnd.github.v3+json\" https://api.github.com/repos/${{ github.repository }}/pulls?state=closed | jq '.[] | select(.merged_at != null and .state == \"closed\") | {number: .number, merged_at: .merged_at, user: .user.login}' | jq -s '.')"
+
+    - name: Comment on approved PRs
+      uses: actions/github-script@v5
       with:
-        node-version: '14.x'
-    - name: Install dependencies
-      run: npm install
-    - name: Comment on PR
-      if: ${{ github.event.review.state == 'approved' && (github.event.timestamp - github.event.pull_request.updated_at) / (24*60*60*1000) >= 1 }}
-      run: node .github/actions/comment-on-pr/index.js
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+            const script = require('./\.github/workflows/scripts/merge.js')
+            script({github, context})
+          
