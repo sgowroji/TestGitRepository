@@ -15,7 +15,7 @@ jobs:
     - name: Get approved pull requests older than a day
       id: get_old_prs
       run: |
-      echo "::set-output name=old_prs::$(curl -s -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/${{ github.repository }}/pulls?state=closed&sort=updated&direction=desc | jq '.[] | select(.merged_at != null and (.labels[].name | contains(\"do not merge\")) | not and .reviews[]? | select(.state == \"APPROVED\" and .submitted_at < (now - 86400 | gmtime | strftime(\"%Y-%m-%dT%H:%M:%SZ\"))) ) | {number: .number, created_at: .created_at, user: .user.login, head_sha: .head.sha, merged_at: .merged_at, approved_reviewers: [ .requested_reviewers[]?.login, .reviews[]? | select(.state == \"APPROVED\") | .user.login ] | unique }' | jq -s '.')"
+        echo "::set-output name=old_prs::$(curl -s -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/${{ github.repository }}/pulls?state=closed&sort=updated&direction=desc | jq '.[] | select(.merged_at != null and (.labels[].name | contains(\"do not merge\")) | not and .reviews[]? | select(.state == \"APPROVED\" and .submitted_at < (now - 86400 | gmtime | strftime(\"%Y-%m-%dT%H:%M:%SZ\")))) | {number: .number, created_at: .created_at, user: .user.login, head_sha: .head.sha, merged_at: .merged_at, approved_reviewers: [ .requested_reviewers[]?.login, .reviews[]? | select(.state == \"APPROVED\") | .user.login ] | unique }' | jq -s '.')"
 
     - name: Comment on approved PRs after a day
       uses: actions/github-script@v5
