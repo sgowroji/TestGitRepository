@@ -2,14 +2,11 @@ name: Comment on Approved PRs
 
 on:
   schedule:
-    - cron: '*/2 * * * *'  
+    - cron: '*/2 * * * *' 
 
 jobs:
   comment-on-approved-prs:
     runs-on: ubuntu-latest
-    permissions:
-       contents: write
-       pull-requests: write
 
     steps:
     - uses: actions/checkout@v2
@@ -28,12 +25,12 @@ jobs:
           const now = new Date();
           const dayInMillis = 1000 * 60 * 60 * 24;
           for (const pr of prs) {
-            const createdAt = new Date(pr.created_at);
-              const comment = `This pull request was approved more than a day ago. Thank you for your contribution! :smile: :+1:`;
-              await github.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: pr.number,
-                body: comment
-              });
+              const created_at = new Date(pr.created_at);
+                const comment = `This pull request was approved more than a day ago. Thank you for your contribution! :smile: :+1:`;
+                await github.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  body: comment
+                });
           }
