@@ -7,6 +7,8 @@ on:
 jobs:
   comment-on-approved-prs:
     runs-on: ubuntu-latest
+    permissions:
+     pull-requests: write
 
     steps:
     - uses: actions/checkout@v2
@@ -14,7 +16,7 @@ jobs:
     - name: Get all open pull requests
       id: get_prs
       run: |
-        echo "::set-output name=prs::$(curl -s -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/${{ github.repository }}/pulls?state=open | jq '.[] | select(.state == \"open\") | {number: .number, created_at: .created_at, user: .user.login, head_sha: .head.sha, approved_reviewers: [ .requested_reviewers[]?.login, .reviews[]? | select(.state == \"APPROVED\") | .user.login ] | unique }' | jq -s '.')"
+        echo "::set-output name=prs::$(curl -s -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/${{ github.repository }}/pulls?state=closed&sort=updated&direction=desc | jq '.[] | select(.merged_at != null and (.labels[].name | contains(\"do not merge\")) | not) | {number: .number, created_at: .created_at, user: .user.login, head_sha: .head.sha, merged_at: .merged_at, approved_reviewers: [ .requested_reviewers[]?.login, .reviews[]? | select(.state == \"APPROVED\") | .user.login ] | unique }' | jq -s '.')"
 
     - name: Comment on approved PRs
       uses: actions/github-script@v5
