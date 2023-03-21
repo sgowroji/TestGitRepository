@@ -1,16 +1,27 @@
-name: remind review
+name: Comment on Approved Pull Request
+
 on:
   schedule:
-    - cron: '*/2 * * * *'
+    - cron: '*/2 * * * *' # Runs every day at midnight
+
 jobs:
-  send_pull_requests:
+  comment_on_approved_pr:
     runs-on: ubuntu-latest
-    name: list of pull requests
     steps:
-      - name: listPullRequests
-        uses: buildsville/list-pull-requests@v1
-        id: list
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
-          token: ${{secrets.GITHUB_TOKEN}}
-      - name: output
-        run: echo '${{ steps.list.outputs.pulls }}'
+          node-version: '14.x'
+      
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Comment on Approved Pull Request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          const script = require('./\.github/workflows/scripts/merge.js')
+            script({github, context})
