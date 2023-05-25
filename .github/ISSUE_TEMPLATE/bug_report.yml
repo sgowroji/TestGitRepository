@@ -50,7 +50,7 @@ body:
     id: bisect
     attributes:
       label: >
-        Is this a regression? If yes, please identify the version or commit where the bug was 
+        Is this a regression? If yes, please identify the version or commit where the bug was
         introduced.
       description: >
         If the problem is specific to the most recent release or the Bazel@HEAD version and it
