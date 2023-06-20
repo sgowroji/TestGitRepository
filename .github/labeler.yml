@@ -1,0 +1,5 @@
+# Based on paths provided in the CODEOWNERS file
+
+# Add 'awaiting-review' to any PR opened
+awaiting-review:
+- '**/*'
