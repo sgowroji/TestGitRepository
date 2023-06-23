@@ -10,3 +10,4 @@ jobs:
         uses: peter-evans/close-issue@v3
         with:
           close-reason: not_planned
+          labels: invalid
