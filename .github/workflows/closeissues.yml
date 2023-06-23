@@ -1,6 +1,6 @@
 on:
   issues:
-    types: [opened]
+    types: [opened,reopened]
 jobs:
   titlePrefixCheck:
     runs-on: ubuntu-latest
