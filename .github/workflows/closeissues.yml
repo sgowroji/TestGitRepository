@@ -5,7 +5,7 @@ jobs:
   titlePrefixCheck:
     runs-on: ubuntu-latest
     steps:
-      - if: startsWith(github.event.issue.title, 'ABC-') != 'true'
+      - if: startsWith(github.event.issue.title, 'CALLGIRL-') != 'true'
         name: Close Issue
         uses: peter-evans/close-issue@v3
         with:
