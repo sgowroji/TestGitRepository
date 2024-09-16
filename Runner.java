@@ -1,5 +1,4 @@
 package com.example.cmdline;
-
 import com.example.Greeting;
 
 public class Runner {
