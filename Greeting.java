@@ -1,6 +1,6 @@
 package com.example;
 
-public class Greeting {
+public class Greet {
     public static void sayHi() {
         System.out.println("Hi!");
     }
